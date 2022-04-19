@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block main %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for anime in results["data"] %}
+            {% if anime["title_english"] %}
+            <tr>
+                <td>{{ anime["title_english"] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>{{ anime["title"] }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
