@@ -29,6 +29,9 @@ def search():
         flash("please provide some search terms", "message")
         return render_template("search.html")
 
+    if not page:
+        page = ""
+
     limit = 100
     url = f"https://api.jikan.moe/v4/anime?q={q}&page={page}&limit={limit}"
     response = requests.get(url)
