@@ -5,48 +5,50 @@ Search Results
 {% endblock %}
 
 {% block main %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for anime in results["data"] %}
-            {% if anime["title_english"] %}
+<div class="container">
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ anime["title_english"] }}</td>
+                <th>Thumbnail</th>
+                <th>Title</th>
             </tr>
-            {% else %}
-            <tr>
-                <td>{{ anime["title"] }}</td>
-            </tr>
+        </thead>
+        <tbody>
+            {% for anime in results["data"] %}
+                <tr>
+                    <td><img src="{{ anime.images.jpg.small_image_url }}"></td>
+                {% if anime["title_english"] %}
+                    <td>{{ anime["title_english"] }}</td>
+                {% else %}
+                    <td>{{ anime["title"] }}</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <nav aria-label="Search results pages">
+        <ul class="pagination">
+            {% if results.pagination.current_page > 1 %}
+            <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ results['pagination']['current_page'] - 1 }}">Previous</a></li>
             {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
-<nav aria-label="Search results pages">
-    <ul class="pagination">
-        {% if results.pagination.current_page > 1 %}
-        <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ results['pagination']['current_page'] - 1 }}">Previous</a></li>
-        {% endif %}
 
-        <!-- Create links for pages up to current active page -->
-        {% for page in range(1, results.pagination.current_page) %}
-        <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ page }}">{{ page }}</a></li>
-        {% endfor %}
+            <!-- Create links for pages up to current active page -->
+            {% for page in range(1, results.pagination.current_page) %}
+            <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ page }}">{{ page }}</a></li>
+            {% endfor %}
 
-        <li class="page-item active"><a class="page-link" href="/search?q={{ q }}&page={{ results.pagination.current_page }}">{{ results.pagination.current_page }}</a></li>
-        
-        <!-- Create links for pages above current active page  -->
-        {% for page in range(results.pagination.current_page + 1, results.pagination.last_visible_page + 1) %}
-        <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ page }}">{{ page }}</a></li>
-        {% endfor %}
+            <li class="page-item active"><a class="page-link" href="/search?q={{ q }}&page={{ results.pagination.current_page }}">{{ results.pagination.current_page }}</a></li>
+            
+            <!-- Create links for pages above current active page  -->
+            {% for page in range(results.pagination.current_page + 1, results.pagination.last_visible_page + 1) %}
+            <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ page }}">{{ page }}</a></li>
+            {% endfor %}
 
-        {% if results.pagination.has_next_page %}
-        <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ results['pagination']['current_page'] + 1 }}">Next</a></li>
-        {% endif %}
+            {% if results.pagination.has_next_page %}
+            <li class="page-item"><a class="page-link" href="/search?q={{ q }}&page={{ results['pagination']['current_page'] + 1 }}">Next</a></li>
+            {% endif %}
 
-    </ul>
-</nav>
+        </ul>
+    </nav>
+</div>
 {% endblock %}
