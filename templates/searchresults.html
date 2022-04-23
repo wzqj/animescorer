@@ -6,26 +6,19 @@ Search Results
 
 {% block main %}
 <div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Thumbnail</th>
-                <th>Title</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for anime in results["data"] %}
-                <tr>
-                    <td><img src="{{ anime.images.jpg.small_image_url }}"></td>
-                {% if anime["title_english"] %}
-                    <td>{{ anime["title_english"] }}</td>
-                {% else %}
-                    <td>{{ anime["title"] }}</td>
-                {% endif %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row row-cols-3 row-cols-lg-4 g-4">
+        {% for anime in results["data"] %}
+        <div class="col">
+            <div class="card">
+            <img src="{{ anime.images.jpg.image_url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ anime["title"] }}</h5>
+                <p class="card-text">Aired: {{ anime["aired"]["string"] }}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+
     <nav aria-label="Search results pages">
         <ul class="pagination">
             {% if results.pagination.current_page > 1 %}
