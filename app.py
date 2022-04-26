@@ -12,7 +12,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-con = sqlite3.connect("animescorer.db")
+con = sqlite3.connect("animescorer.db", check_same_thread=False)
 cur = con.cursor()
 
 @app.route("/")
@@ -48,6 +48,25 @@ def search():
 def login():
     return "login"
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return "register"
+    if request.method == "POST":
+        username = request.form.get("username")
+        if not username:
+            return "no username entered"
+        password = request.form.get("password")
+        if not password:
+            return "no password entered"
+        confirm = request.form.get("confirm")
+        if not confirm == password:
+            return "passwords do not match"
+        
+        # Read from db to check if username already exists
+        if cur.execute("SELECT * FROM users WHERE username = (?)", (username,)).fetchone():
+            return "username already exists"
+
+        cur.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password)))
+        con.commit()
+        return redirect("/")
+
+    return render_template("register.html")
