@@ -45,8 +45,38 @@ def search():
 
     return render_template("searchresults.html", q=q, page=page, results=results)
 
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return "login"
+
+    # Clear existing sessions
+    session.clear()
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        if not username:
+            return "no username entered"
+        password = request.form.get("password")
+        if not password:
+            return "no password entered"
+
+        # Get id of user
+        id = cur.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()[0]
+        if not id:
+            return "user not found"
+
+        # Remember user's id
+        session["user_id"] = id
+        app.logger.info(id)
+        
+        return redirect("/")
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+
+    return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
