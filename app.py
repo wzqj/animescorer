@@ -60,13 +60,13 @@ def login():
             return "no password entered"
 
         # Get id of user
-        id = cur.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()[0]
-        if not id:
+        row = cur.execute("SELECT id, hash FROM users WHERE username = (?)", (username,)).fetchone()
+        if not row or not check_password_hash(row[1], password):
             return "user not found"
 
         # Remember user's id
-        session["user_id"] = id
-        app.logger.info(id)
+        session["user_id"] = row[0]
+        app.logger.info(row)
         
         return redirect("/")
 
