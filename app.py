@@ -67,6 +67,11 @@ def register():
 
         cur.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password)))
         con.commit()
+
+        id = cur.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
+        session["user_id"] = id
+
+        
         return redirect("/")
 
     return render_template("register.html")
