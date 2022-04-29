@@ -98,9 +98,9 @@ def register():
         cur.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password)))
         con.commit()
 
-        id = cur.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
+        # Get id from sequence
+        id = cur.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()[0]
         session["user_id"] = id
-
         
         return redirect("/")
 
