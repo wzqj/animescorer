@@ -105,3 +105,13 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
+@app.route("/anime/<animeid>")
+def animedetails(animeid):
+    url = f"https://api.jikan.moe/v4/anime/{animeid}"
+    response = requests.get(url)
+    response.raise_for_status()
+
+    results = response.json()
+
+    return render_template("details.html", results=results)
