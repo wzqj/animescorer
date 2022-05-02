@@ -10,10 +10,12 @@ Search Results
         {% for anime in results["data"] %}
         <div class="col">
             <div class="card">
-            <img src="{{ anime.images.jpg.image_url }}" class="card-img-top" alt="...">
+                <a href="/anime/{{ anime["mal_id"] }}">
+                    <img src="{{ anime.images.jpg.image_url }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ anime["title"] }}</h5>
                 <p class="card-text">Aired: {{ anime["aired"]["string"] }}</p>
+                </a>
             </div>
             </div>
         </div>
